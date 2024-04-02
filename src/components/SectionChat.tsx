@@ -199,7 +199,7 @@ function MessageBox({ message }: MessageBoxProps) {
 
         {/* Message content */}
 
-        <div className="text-gray-5 text-sm px-2">{content}</div>
+        <div className="text-gray-300 text-sm px-2">{content}</div>
 
         {/* Suffix icon */}
         {sender === Sender.User ? icon : null}
