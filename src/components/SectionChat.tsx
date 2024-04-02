@@ -6,7 +6,7 @@ import { ChatProvider, Sender } from "@/utils/enums";
 import { RiRobot2Fill } from "react-icons/ri";
 import { PiUserCircle } from "react-icons/pi";
 import useConversationsStore from "@/hooks/useConversationsStore";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PulseLoader from "react-spinners/PulseLoader";
 import { useSettingsStore } from "@/hooks/useSettingsStore";
 import DialogSettings from "./DialogSettings";
@@ -17,6 +17,7 @@ export default function SectionChat() {
   const { currentConversation, updateCurrentConversation, setResponseLoading } =
     useConversationsStore();
   const { openaiKey, groqKey, setDialogOpen } = useSettingsStore();
+  const inputRef = useRef<HTMLInputElement>(null); // To give focus to the textfield
   const messages = currentConversation?.messages ?? [];
 
   const [message, updateMessage] = useState("");
@@ -130,6 +131,7 @@ export default function SectionChat() {
           );
           updateCurrentConversation(currentConversation);
         }
+        inputRef.current?.focus();
       } catch (error) {
         setResponseLoading(false);
         showErrorToast("Error in fetching response");
@@ -139,7 +141,7 @@ export default function SectionChat() {
   };
 
   return (
-    <div className="h-full flex flex-col-reverse px-10 py-5">
+    <div className="h-full flex flex-col-reverse px-10 py-5 max-h-screen">
       <DialogSettings />
 
       {/* Text Field for user */}
@@ -152,18 +154,21 @@ export default function SectionChat() {
         onRefresh={handleRefresh}
       />
 
-      {/* Chat messages */}
-      {messages.map((message) => {
-        return (
-          <MessageBox
-            key={message.timestamp
-              .toString()
-              .concat(message.content)
-              .concat(message.sender.toString())}
-            message={message}
-          />
-        );
-      })}
+      <div className="flex-grow overflow-y-auto flex flex-col-reverse justify-start">
+            {/* Chat messages */}
+            {messages.map((message) => {
+            return (
+                <MessageBox
+                key={message.timestamp
+                    .toString()
+                    .concat(message.content)
+                    .concat(message.sender.toString())}
+                message={message}
+                />
+            );
+            })}
+
+        </div>
     </div>
   );
 }
@@ -217,16 +222,24 @@ function InputMessageBox({
   onEnter,
   value,
   onRefresh,
+    
 }: InputMessageBoxProps) {
   const { isResponseLoading } = useConversationsStore();
+  const inputRef = useRef<HTMLInputElement>(null);
+    useEffect(() => {
+        if (!isResponseLoading && inputRef.current !== null) {
+            inputRef.current?.focus();
+        }
+    }, [isResponseLoading]);
   return (
-    <div className="w-full h-10 rounded-lg bg-gray-3 flex flex-row items-center space-x-2 mt-1">
+    <div className="w-full h-10 rounded-lg bg-gray-3 flex flex-row items-center space-x-2 mt-1 flex-shrink-0">
       {isResponseLoading ? (
         <div className="w-full flex flex-row justify-center">
           <PulseLoader color="#767676" className="" size={8} />
         </div>
       ) : (
         <input
+          ref={inputRef}
           placeholder="Say something"
           className="w-full h-full bg-gray-3 text-white rounded-lg text-sm px-4 outline-none"
           value={value}
