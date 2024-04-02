@@ -18,7 +18,7 @@ export default function SectionConfigurations() {
   const chatProvider = currentConversation?.chatProvider ?? ChatProvider.OpenAI;
 
   return (
-    <div className="px-11 pt-14 space-y-3 h-full ">
+    <div className="px-5 pt-14 space-y-3 h-full ">
       <TextField
         hint={"User name"}
         isHintVisible={true}

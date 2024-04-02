@@ -12,7 +12,7 @@ export default function Home() {
     <Toaster />
       <main className="container grid grid-cols-12 max-w-screen-2xl min-h-screen divide-x divide-gray-7">
         {/* Conversations side bar */}
-        <div className="col-span-3 bg-gray-2">
+        <div className="col-span-2 bg-gray-2">
           <SectionConversations />
         </div>
 
@@ -22,7 +22,7 @@ export default function Home() {
         </div>
 
         {/* Configurations section */}
-        <div className="col-span-3">
+        <div className="col-span-4">
           <SectionConfigurations />
         </div>
       </main>

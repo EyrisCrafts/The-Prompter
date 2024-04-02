@@ -42,13 +42,13 @@ export default function SectionConversations() {
       {/* Title and Settings */}
       <div className="flex flex-row items-center ">
         {/* Logo */}
-        <RiRobot2Fill color="#767676" className="flex-shrink-0" size={26} />
+        <RiRobot2Fill color="#767676" className="flex-shrink-0" size={22} />
         {/* Title */}
-        <div className="text-gray-5 text-md ml-3">Conversations</div>
+        <div className="text-gray-5 text-sm ml-3">Conversations</div>
         {/* Spacer */}
         <div className="flex-grow"></div>
         {/* Settings */}
-        <IoIosSettings onClick={handleSettings} color="#767676" className="cursor-pointer flex-shrink-0" size={26} />
+        <IoIosSettings onClick={handleSettings} color="#767676" className="cursor-pointer flex-shrink-0" size={24} />
       </div>
 
       {/* Start Conversations */}
