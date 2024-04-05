@@ -66,6 +66,10 @@ export default function SectionChat() {
       showErrorToast("Prompt is not set");
       return;
     }
+    if (currentConversation?.system === "") {
+      showErrorToast("System prompt is not set");
+      return;
+    }
     if (currentConversation?.userName === "") {
       showErrorToast("User name is not set");
       return;

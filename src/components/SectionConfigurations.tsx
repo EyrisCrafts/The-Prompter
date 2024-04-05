@@ -11,6 +11,7 @@ export default function SectionConfigurations() {
   const userName = currentConversation?.userName ?? "";
   const characterName = currentConversation?.characterName ?? "";
   const intro = currentConversation?.intro ?? "";
+  const system = currentConversation?.system ?? "";
   const prompt = currentConversation?.prompt ?? "";
   const maxTokens = currentConversation?.maxTokens ?? "";
   const temperature = currentConversation?.temperature ?? "";
@@ -52,6 +53,18 @@ export default function SectionConfigurations() {
             showErrorToast("Conversation not set");
           }
           currentConversation && (currentConversation.intro = newValue);
+          currentConversation && updateCurrentConversation(currentConversation);
+        }}
+      />
+      <TextField
+        hint={"System"}
+        isHintVisible={true}
+        value={system}
+        onChange={(newValue) => {
+          if (currentConversation == null) {
+            showErrorToast("Conversation not set");
+          }
+          currentConversation && (currentConversation.system = newValue);
           currentConversation && updateCurrentConversation(currentConversation);
         }}
       />

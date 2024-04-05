@@ -23,6 +23,7 @@ export default function SectionConversations() {
       [],
       ChatProvider.OpenAI,
       "",
+      "you are a screen writer who is writing this script with the character name then a colon then what they are saying",
       100,
       0.5,
       0.3,
@@ -45,7 +46,7 @@ export default function SectionConversations() {
         {/* Logo */}
         <RiRobot2Fill color="#767676" className="flex-shrink-0" size={22} />
         {/* Title */}
-        <div className="text-gray-5 text-sm ml-3">Conversations</div>
+        <div className="text-gray-5 text-sm ml-3">The-Prompter</div>
         {/* Spacer */}
         <div className="flex-grow"></div>
         {/* Settings */}

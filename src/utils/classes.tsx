@@ -6,6 +6,8 @@ export class Conversation {
     public messages: Message[],
     public chatProvider: ChatProvider,
     public prompt: string,
+    public system: string,
+
     public maxTokens: number,
     public temperature: number,
     public topP: number,
@@ -15,6 +17,7 @@ export class Conversation {
   ) {
     this.id = id;
     this.messages = messages;
+    this.system = system;
     this.chatProvider = chatProvider;
     this.prompt = prompt;
     this.maxTokens = maxTokens;

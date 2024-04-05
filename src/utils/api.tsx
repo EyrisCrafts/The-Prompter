@@ -60,7 +60,7 @@ export async function apiCall(
     messagesOpenai.unshift({
       role: "system",
       content:
-        "you are a screen writer who is writing this script with the character name then a colon then what they are saying",
+        conversation.system,
     });
 
     console.log("messagesOpenai", messagesOpenai);
