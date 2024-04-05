@@ -7,14 +7,15 @@ import { Conversation, Message } from "@/utils/classes";
 import { IoMdTrash } from "react-icons/io";
 import { ChatProvider, Sender } from "@/utils/enums";
 import useConversationsStore from "@/hooks/useConversationsStore";
-import { generateId } from "@/utils/utils";
+import { generateId, showErrorToast } from "@/utils/utils";
 import MyComponent from "./DialogSettings";
 import { useSettingsStore } from "@/hooks/useSettingsStore";
+import { useState } from "react";
 
 export default function SectionConversations() {
   const { conversations, addConversation, setCurrentConversation } =
     useConversationsStore();
-    const {isDialogOpen, setDialogOpen} = useSettingsStore();
+  const { isDialogOpen, setDialogOpen } = useSettingsStore();
 
   const handleNewConversation = () => {
     const newConversation = new Conversation(
@@ -35,7 +36,7 @@ export default function SectionConversations() {
 
   const handleSettings = () => {
     setDialogOpen(true);
-  }
+  };
 
   return (
     <div className="flex flex-col h-full w-full px-4 py-8 space-y-3">
@@ -48,7 +49,12 @@ export default function SectionConversations() {
         {/* Spacer */}
         <div className="flex-grow"></div>
         {/* Settings */}
-        <IoIosSettings onClick={handleSettings} color="#767676" className="cursor-pointer flex-shrink-0" size={24} />
+        <IoIosSettings
+          onClick={handleSettings}
+          color="#767676"
+          className="cursor-pointer flex-shrink-0"
+          size={24}
+        />
       </div>
 
       {/* Start Conversations */}
@@ -56,7 +62,7 @@ export default function SectionConversations() {
 
       {/* List of Conversations */}
       <ListConversations conversations={conversations} />
-      <MyComponent/>
+      <MyComponent />
     </div>
   );
 }
@@ -92,20 +98,52 @@ function ConversationBox({
   conversation,
   isSelected = false,
 }: ConversationBoxProps) {
-  const { setCurrentConversation, removeConversation } = useConversationsStore();
+  const { setCurrentConversation, removeConversation } =
+    useConversationsStore();
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [buttonText, setButtonText] = useState(conversation.id);
 
   const handleOnClick = () => {
     setCurrentConversation(conversation);
   };
   const handleDeleteConversation = (event: React.MouseEvent) => {
-    removeConversation(conversation)
+    removeConversation(conversation);
     event.stopPropagation();
+  };
+
+  // Typed event handler for double click
+  const handleDoubleClick = () => {
+    setIsEditing(true);
+  };
+
+  // Typed event handler for changes in the input field
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setButtonText(event.target.value);
+  };
+
+  // Typed event handler for key press events
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      setIsEditing(false);
+      event.preventDefault(); // Prevent form submission
+      updateText();
+    }
+  };
+
+  const updateText = () => {
+    if (buttonText === "") {
+      showErrorToast("Conversation ID cannot be empty");
+      return;
+    }
+    conversation.id = buttonText;
   };
 
   return (
     <div
       onClick={handleOnClick}
-      className={`group h-12 px-3 space-x-2 flex flex-row items-center ${
+      onDoubleClick={handleDoubleClick}
+      className={`group h-9 px-3 space-x-2 flex flex-row items-center ${
         !isSelected ? "hover:bg-gray-4" : ""
       } rounded-lg cursor-pointer ${isSelected ? "bg-gray-3" : ""}`}
     >
@@ -117,8 +155,23 @@ function ConversationBox({
         size={20}
       />
       {/* Name */}
-      <div className="text-gray-5 text-sm">{conversation.id}</div>
-      
+      {isEditing ? (
+        <input
+          type="text"
+          value={buttonText}
+          // onSubmit={handleChange}
+          onChange={handleChange}
+          onKeyPress={handleKeyPress}
+          autoFocus // Automatically focus the input when it appears
+          onBlur={() => {
+            updateText();
+            setIsEditing(false);
+          }} // Optionally, exit edit mode when input loses focus
+          className="bg-gray-3 text-gray-5 text-sm p-1"
+        />
+      ) : (
+        <div className="text-gray-5 text-sm">{conversation.id}</div>
+      )}
     </div>
   );
 }
