@@ -19,7 +19,7 @@ export default function SectionConversations() {
 
   const handleNewConversation = () => {
     const newConversation = new Conversation(
-      generateId(),
+      "Conversation-" + conversations.length,
       [],
       ChatProvider.OpenAI,
       "",
